@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"io/ioutil"
-	"log"
 	"os"
 )
 
@@ -21,10 +20,7 @@ func New(filename string) *MiniDB {
 		ioutil.WriteFile(filename, content, 0755)
 	} else {
 		data, err := ioutil.ReadFile(filename)
-
-		if err != nil {
-			log.Fatalln(err)
-		}
+		logError(err, err)
 
 		content = data
 	}
@@ -41,9 +37,7 @@ func New(filename string) *MiniDB {
 // writeToDB write the db.store to the defined json db file.
 func (db *MiniDB) writeToDB() {
 	m, err := json.Marshal((db.store))
-	if err != nil {
-		panic("error while trying to write to db")
-	}
+	logError(err, "error while trying to write to db")
 
 	ioutil.WriteFile(db.filename, []byte(string(m)), 0755)
 }
@@ -60,20 +54,4 @@ func (db *MiniDB) KeyValue(key string, value interface{}) {
 	db.store[key] = value
 
 	db.writeToDB()
-}
-
-// getValue tries to get the key from the map if exists. If value is nil,
-//  It will log error that the key is unknown.
-func (db *MiniDB) getValue(key string) interface{} {
-	value := db.store[key]
-	if value == nil {
-		log.Fatalf("Unknown key: %s", key)
-	}
-
-	return value
-}
-
-// GetBool finds the key with bool value and returns if exits.
-func (db *MiniDB) GetBool(key string) bool {
-	return db.getValue(key).(bool)
 }
