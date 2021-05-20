@@ -4,6 +4,10 @@ import "log"
 
 // KeyValue creates a new key with a given value in the json.
 func (db *MiniDB) KeyValue(key string, value interface{}) {
+	d := db.getOrCreateMutex(key)
+	d.Lock()
+	defer d.Unlock()
+
 	db.store.Values[key] = value
 
 	db.writeToDB()

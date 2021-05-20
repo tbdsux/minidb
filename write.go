@@ -8,5 +8,6 @@ import (
 func (db *MiniDB) writeToDB() {
 	data := db.marshalStore()
 
-	ioutil.WriteFile(db.db, []byte(string(data)), 0755)
+	err := ioutil.WriteFile(db.db, data, 0755)
+	logError(err, "Error writing to DB.")
 }

@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"sync"
 
 	"github.com/segmentio/ksuid"
 )
@@ -15,6 +16,8 @@ type MiniDB struct {
 	filename string
 	db       string // combined path and filename
 	store    BaseMiniDB
+	mutex    *sync.Mutex
+	mutexes  map[string]*sync.Mutex
 }
 
 type BaseMiniDB struct {
@@ -39,6 +42,8 @@ func parseNew(folderPath, filename string) *MiniDB {
 		db:       path.Join(folderPath, filename),
 		path:     folderPath,
 		filename: filename,
+		mutex:    &sync.Mutex{},
+		mutexes:  make(map[string]*sync.Mutex),
 	}
 
 	var content []byte = []byte("")
@@ -56,7 +61,7 @@ func parseNew(folderPath, filename string) *MiniDB {
 
 	// create the json db file
 	if _, err := os.Stat(db.db); errors.Is(err, os.ErrNotExist) {
-		db.createDbFile()
+		db.writeToDB()
 	} else {
 		data, err := ioutil.ReadFile(db.db)
 		logError(err, err)
@@ -67,6 +72,23 @@ func parseNew(folderPath, filename string) *MiniDB {
 	json.Unmarshal(content, &db.store)
 
 	return db
+}
+
+// referred from ::> https://github.com/sdomino/scribble/blob/master/scribble.go#L254
+func (db *MiniDB) getOrCreateMutex(key string) *sync.Mutex {
+
+	db.mutex.Lock()
+	defer db.mutex.Unlock()
+
+	m, ok := db.mutexes[key]
+
+	// if the mutex doesn't exist make it
+	if !ok {
+		m = &sync.Mutex{}
+		db.mutexes[key] = m
+	}
+
+	return m
 }
 
 // generates a new id with ksuid
