@@ -2,49 +2,27 @@ package minidb
 
 import (
 	"encoding/json"
-	"errors"
-	"io/ioutil"
-	"os"
 	"path"
 	"sync"
 )
 
 func parseCollection(folderPath, filename string) *MiniCollections {
-	cols := &MiniCollections{
+	db := &MiniCollections{
 		path:     folderPath,
 		filename: filename,
 		db:       path.Join(folderPath, filename),
-		store:    []interface{}{},
+		store:    MiniDBCollectionsStore{},
 		mutex:    &sync.Mutex{},
 		mutexes:  make(map[int]*sync.Mutex),
 	}
 
-	var content []byte
-
-	if initialData, err := json.Marshal(&cols.store); err != nil {
-		content = initialData
-	}
-
-	// create the folder
-	if _, err := os.Stat(folderPath); errors.Is(err, os.ErrNotExist) {
-		os.MkdirAll(folderPath, 0755)
+	if content, f := ensureInitialDB(folderPath, db.db); f {
+		db.writeToDB()
 	} else {
-		logError(err, "error trying to read / check folder")
+		json.Unmarshal(content, &db.store)
 	}
 
-	// create the json db file
-	if _, err := os.Stat(cols.db); errors.Is(err, os.ErrNotExist) {
-		cols.writeToDB()
-	} else {
-		data, err := ioutil.ReadFile(cols.db)
-		logError(err, err)
-
-		content = data
-	}
-
-	json.Unmarshal(content, &cols.store)
-
-	return cols
+	return db
 }
 
 // Collections creates a new key with an array / slice value.

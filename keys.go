@@ -2,9 +2,6 @@ package minidb
 
 import (
 	"encoding/json"
-	"errors"
-	"io/ioutil"
-	"os"
 	"path"
 	"sync"
 )
@@ -43,30 +40,11 @@ func parseNew(folderPath, filename string) *MiniDB {
 		mutexes:  make(map[string]*sync.Mutex),
 	}
 
-	var content []byte
-
-	if initialData, err := json.Marshal(&db.store); err != nil {
-		content = initialData
-	}
-
-	// create the folder
-	if _, err := os.Stat(folderPath); errors.Is(err, os.ErrNotExist) {
-		os.MkdirAll(folderPath, 0755)
-	} else {
-		logError(err, "error trying to read / check folder")
-	}
-
-	// create the json db file
-	if _, err := os.Stat(db.db); errors.Is(err, os.ErrNotExist) {
+	if content, f := ensureInitialDB(folderPath, db.db); f {
 		db.writeToDB()
 	} else {
-		data, err := ioutil.ReadFile(db.db)
-		logError(err, err)
-
-		content = data
+		json.Unmarshal(content, &db.store)
 	}
-
-	json.Unmarshal(content, &db.store)
 
 	return db
 }

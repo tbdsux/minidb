@@ -22,12 +22,13 @@ type (
 		Values      map[string]interface{} `json:"values"`
 	}
 
+	MiniDBCollectionsStore = []interface{}
 	// MiniCollections is a new collections store.
 	MiniCollections struct {
 		path     string
 		filename string
 		db       string // combined path and filename
-		store    []interface{}
+		store    MiniDBCollectionsStore
 		mutex    *sync.Mutex
 		mutexes  map[int]*sync.Mutex
 	}
