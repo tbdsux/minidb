@@ -9,15 +9,6 @@ import (
 	"sync"
 )
 
-type MiniCollections struct {
-	path     string
-	filename string
-	db       string // combined path and filename
-	store    []interface{}
-	mutex    *sync.Mutex
-	mutexes  map[int]*sync.Mutex
-}
-
 func parseCollection(folderPath, filename string) *MiniCollections {
 	cols := &MiniCollections{
 		path:     folderPath,
@@ -73,21 +64,4 @@ func (db *MiniDB) Collections(key string) *MiniCollections {
 	db.writeToDB()
 
 	return parseCollection(db.path, filename)
-}
-
-// referred from ::> https://github.com/sdomino/scribble/blob/master/scribble.go#L254
-func (c *MiniCollections) getOrCreateMutex(key int) *sync.Mutex {
-
-	c.mutex.Lock()
-	defer c.mutex.Unlock()
-
-	m, ok := c.mutexes[key]
-
-	// if the mutex doesn't exist make it
-	if !ok {
-		m = &sync.Mutex{}
-		c.mutexes[key] = m
-	}
-
-	return m
 }
