@@ -4,10 +4,22 @@ import (
 	"io/ioutil"
 )
 
+// writes the file
+func write(file string, data []byte) {
+	err := ioutil.WriteFile(file, data, 0755)
+	logError(err, "Error writing to DB.")
+}
+
 // writeToDB write the db.store to the defined json db file.
 func (db *MiniDB) writeToDB() {
-	data := db.marshalStore()
+	data := marshalStore(db.store)
 
-	err := ioutil.WriteFile(db.db, data, 0755)
-	logError(err, "Error writing to DB.")
+	write(db.db, data)
+}
+
+// writeToDB writes the cols.store to the defined json db file.
+func (cols *MiniCollections) writeToDB() {
+	data := marshalStore(cols.store)
+
+	write(cols.db, data)
 }

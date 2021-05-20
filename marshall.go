@@ -5,8 +5,8 @@ import (
 )
 
 // return the marshalled db.store
-func (db *MiniDB) marshalStore() []byte {
-	d, err := json.Marshal(db.store)
+func marshalStore(v interface{}) []byte {
+	d, err := json.Marshal(v)
 	logError(err, "error tring to marshall struct")
 
 	return d

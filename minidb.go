@@ -46,7 +46,7 @@ func parseNew(folderPath, filename string) *MiniDB {
 		mutexes:  make(map[string]*sync.Mutex),
 	}
 
-	var content []byte = []byte("")
+	var content []byte
 
 	if initialData, err := json.Marshal(&db.store); err != nil {
 		content = initialData
