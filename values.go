@@ -2,6 +2,13 @@ package minidb
 
 import "log"
 
+// KeyValue creates a new key with a given value in the json.
+func (db *MiniDB) KeyValue(key string, value interface{}) {
+	db.store.Values[key] = value
+
+	db.writeToDB()
+}
+
 //
 func (db *MiniDB) recoverAssertion() {
 	if r := recover(); r != nil {
