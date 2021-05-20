@@ -2,11 +2,19 @@ package minidb
 
 import "log"
 
+//
+func (db *MiniDB) recoverAssertion() {
+	if r := recover(); r != nil {
+		log.Fatalln(r)
+	}
+}
+
 // getValue tries to get the key from the map if exists. If value is nil,
 //  It will log error that the key is unknown.
 func (db *MiniDB) getValue(key string) interface{} {
-	value := db.store[key]
-	if value == nil {
+	value, ok := db.store.Values[key]
+
+	if !ok {
 		log.Fatalf("Unknown key: %s", key)
 	}
 
@@ -15,5 +23,14 @@ func (db *MiniDB) getValue(key string) interface{} {
 
 // GetBool finds the key with bool value and returns if exits.
 func (db *MiniDB) GetBool(key string) bool {
+	defer db.recoverAssertion()
+
 	return db.getValue(key).(bool)
+}
+
+// GetString finds the key with the string value and returns if exists.
+func (db *MiniDB) GetString(key string) string {
+	defer db.recoverAssertion()
+
+	return db.getValue(key).(string)
 }
