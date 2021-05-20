@@ -23,3 +23,10 @@ func (cols *MiniCollections) writeToDB() {
 
 	write(cols.db, data)
 }
+
+// writeToDB writes the st.store to the defined json db file.
+func (st *MiniStore) writeToDB() {
+	data := marshalStore(st.store)
+
+	write(st.db, data)
+}

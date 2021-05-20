@@ -22,20 +22,27 @@ type (
 
 	// MiniDBStore is the types of MiniDB.store
 	MiniDBStore struct {
-		Keys        map[string]string      `json:"keys"`
-		Collections map[string]string      `json:"collections"`
-		Values      map[string]interface{} `json:"values"`
+		Keys        map[string]string `json:"keys"`
+		Collections map[string]string `json:"collections"`
+		Values      map[string]string `json:"values"`
 	}
 
-	// MiniCollections is a new collections store.
+	// MiniCollections is a collections store.
 	MiniCollections struct {
 		store   []interface{}
 		mutexes map[int]*sync.Mutex
+		BaseMiniDB
+	}
+
+	// MiniStore is a key-value store.
+	MiniStore struct {
+		store   map[string]interface{}
+		mutexes map[string]*sync.Mutex
 		BaseMiniDB
 	}
 )
 
 // New creates a new MiniDB struct.
 func New(folderPath string) *MiniDB {
-	return parseNew(folderPath, "__default.json")
+	return newMiniDB(folderPath, "__default.json")
 }

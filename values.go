@@ -1,25 +1,73 @@
 package minidb
 
-import "log"
+import (
+	"encoding/json"
+	"log"
+	"path"
+	"sync"
+)
 
-// KeyValue creates a new key with a given value in the json.
-func (db *MiniDB) KeyValue(key string, value interface{}) {
+// KeyStore creates a new key with a given value in the json.
+func (db *MiniDB) KeyStore(key string) *MiniStore {
 	d := db.getOrCreateMutex(key)
 	d.Lock()
 	defer d.Unlock()
 
-	db.store.Values[key] = value
+	// if the key exists, get the file's name,
+	// otherwise, create a new one
+	filename, ok := db.store.Keys[key]
+	if !ok {
+		filename = generateFileName("store")
+	}
+
+	db.store.Keys[key] = filename
 	db.writeToDB()
+
+	return newMiniStore(db.path, filename)
+}
+
+func newMiniStore(folderPath, filename string) *MiniStore {
+	db := &MiniStore{
+		store:   map[string]interface{}{},
+		mutexes: make(map[string]*sync.Mutex),
+		BaseMiniDB: BaseMiniDB{
+			db:       path.Join(folderPath, filename),
+			path:     folderPath,
+			filename: filename,
+			mutex:    &sync.Mutex{},
+		},
+	}
+	if content, f := ensureInitialDB(folderPath, db.db); f {
+		db.writeToDB()
+	} else {
+		json.Unmarshal(content, &db.store)
+	}
+
+	return db
 }
 
 // getValue tries to get the key from the map if exists. If value is nil,
 // It will log error that the key is unknown.
-func (db *MiniDB) getValue(key string) interface{} {
-	value, ok := db.store.Values[key]
+func (db *MiniStore) getValue(key string) interface{} {
+	d := db.getOrCreateMutex(key)
+	d.Lock()
+	defer d.Unlock()
+
+	value, ok := db.store[key]
 
 	if !ok {
 		log.Fatalf("Unknown key: %s", key)
 	}
 
 	return value
+}
+
+// Set sets the store[key] to v.
+func (db *MiniStore) Set(key string, v interface{}) {
+	d := db.getOrCreateMutex(key)
+	d.Lock()
+	defer d.Unlock()
+
+	db.store[key] = v
+	db.writeToDB()
 }

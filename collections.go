@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 
-func parseCollection(folderPath, filename string) *MiniCollections {
+func newMiniCollection(folderPath, filename string) *MiniCollections {
 	db := &MiniCollections{
 		store:   []interface{}{},
 		mutexes: make(map[int]*sync.Mutex),
@@ -37,11 +37,11 @@ func (db *MiniDB) Collections(key string) *MiniCollections {
 	// otherwise, create a new one
 	filename, ok := db.store.Collections[key]
 	if !ok {
-		filename = "cols." + generateId() + ".json"
+		filename = generateFileName("cols")
 	}
 
 	db.store.Collections[key] = filename
 	db.writeToDB()
 
-	return parseCollection(db.path, filename)
+	return newMiniCollection(db.path, filename)
 }

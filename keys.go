@@ -16,22 +16,22 @@ func (db *MiniDB) Key(key string) *MiniDB {
 	// otherwise, create a new one
 	filename, ok := db.store.Keys[key]
 	if !ok {
-		filename = generateId() + ".json"
+		filename = generateFileName("key")
 	}
 
 	db.store.Keys[key] = filename
 	db.writeToDB()
 
-	return parseNew(db.path, filename)
+	return newMiniDB(db.path, filename)
 }
 
 // this is helper for creating a new key db
-func parseNew(folderPath, filename string) *MiniDB {
+func newMiniDB(folderPath, filename string) *MiniDB {
 	db := &MiniDB{
 		store: MiniDBStore{
 			Keys:        map[string]string{},
 			Collections: map[string]string{},
-			Values:      map[string]interface{}{},
+			Values:      map[string]string{},
 		},
 		mutexes: make(map[string]*sync.Mutex),
 		BaseMiniDB: BaseMiniDB{

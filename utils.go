@@ -23,6 +23,11 @@ func generateId() string {
 	return ksuid.New().String()
 }
 
+// generate a string filename
+func generateFileName(k string) string {
+	return k + "." + generateId() + ".json"
+}
+
 // return the marshalled db.store
 func marshalStore(v interface{}) []byte {
 	d, err := json.Marshal(v)
