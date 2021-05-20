@@ -5,14 +5,19 @@ import (
 )
 
 type (
-	// MiniDB is the base store file.
-	MiniDB struct {
+	// BaseMiniDB is the base db structure.
+	BaseMiniDB struct {
 		path     string
 		filename string
 		db       string // combined path and filename
-		store    MiniDBStore
 		mutex    *sync.Mutex
-		mutexes  map[string]*sync.Mutex
+	}
+
+	// MiniDB is the base store file.
+	MiniDB struct {
+		store   MiniDBStore
+		mutexes map[string]*sync.Mutex
+		BaseMiniDB
 	}
 
 	// MiniDBStore is the types of MiniDB.store
@@ -22,15 +27,11 @@ type (
 		Values      map[string]interface{} `json:"values"`
 	}
 
-	MiniDBCollectionsStore = []interface{}
 	// MiniCollections is a new collections store.
 	MiniCollections struct {
-		path     string
-		filename string
-		db       string // combined path and filename
-		store    MiniDBCollectionsStore
-		mutex    *sync.Mutex
-		mutexes  map[int]*sync.Mutex
+		store   []interface{}
+		mutexes map[int]*sync.Mutex
+		BaseMiniDB
 	}
 )
 

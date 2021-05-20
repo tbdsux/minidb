@@ -8,12 +8,14 @@ import (
 
 func parseCollection(folderPath, filename string) *MiniCollections {
 	db := &MiniCollections{
-		path:     folderPath,
-		filename: filename,
-		db:       path.Join(folderPath, filename),
-		store:    MiniDBCollectionsStore{},
-		mutex:    &sync.Mutex{},
-		mutexes:  make(map[int]*sync.Mutex),
+		store:   []interface{}{},
+		mutexes: make(map[int]*sync.Mutex),
+		BaseMiniDB: BaseMiniDB{
+			path:     folderPath,
+			filename: filename,
+			db:       path.Join(folderPath, filename),
+			mutex:    &sync.Mutex{},
+		},
 	}
 
 	if content, f := ensureInitialDB(folderPath, db.db); f {

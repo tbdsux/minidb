@@ -33,13 +33,14 @@ func parseNew(folderPath, filename string) *MiniDB {
 			Collections: map[string]string{},
 			Values:      map[string]interface{}{},
 		},
-		db:       path.Join(folderPath, filename),
-		path:     folderPath,
-		filename: filename,
-		mutex:    &sync.Mutex{},
-		mutexes:  make(map[string]*sync.Mutex),
+		mutexes: make(map[string]*sync.Mutex),
+		BaseMiniDB: BaseMiniDB{
+			db:       path.Join(folderPath, filename),
+			path:     folderPath,
+			filename: filename,
+			mutex:    &sync.Mutex{},
+		},
 	}
-
 	if content, f := ensureInitialDB(folderPath, db.db); f {
 		db.writeToDB()
 	} else {
