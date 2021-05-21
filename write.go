@@ -1,14 +1,12 @@
 package minidb
 
 import (
-	"fmt"
 	"io/ioutil"
 )
 
 // writes the file
 func write(file string, data []byte) {
 	err := ioutil.WriteFile(file, data, 0755)
-	fmt.Println(err)
 	logError(err, "Error writing to DB.")
 }
 
