@@ -7,16 +7,16 @@ import (
 type (
 	// BaseMiniDB is the base db structure.
 	BaseMiniDB struct {
-		path     string
-		filename string
-		db       string // combined path and filename
-		mutex    *sync.Mutex
+		db    string // combined path and filename
+		mutex *sync.Mutex
 	}
 
 	// MiniDB is the base store file.
 	MiniDB struct {
-		store   MiniDBStore
-		mutexes map[string]*sync.Mutex
+		path     string
+		filename string
+		store    MiniDBStore
+		mutexes  map[string]*sync.Mutex
 		BaseMiniDB
 	}
 
@@ -50,11 +50,11 @@ func New(dir string) *MiniDB {
 }
 
 // NewMiniStore creates and returns a new key-store collection json db.
-func NewMiniStore(dir, file string) *MiniStore {
-	return newMiniStore(dir, file)
+func NewMiniStore(f string) *MiniStore {
+	return newMiniStore(f)
 }
 
 // NewMiniCollections creates and returns a new collections json db.
-func NewMiniCollections(dir, file string) *MiniCollections {
-	return newMiniCollection(dir, file)
+func NewMiniCollections(f string) *MiniCollections {
+	return newMiniCollection(f)
 }

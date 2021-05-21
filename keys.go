@@ -6,6 +6,33 @@ import (
 	"sync"
 )
 
+// this is helper for creating a new key db
+func newMiniDB(dir, filename string) *MiniDB {
+	db := &MiniDB{
+		path:     dir,
+		filename: filename,
+		store: MiniDBStore{
+			Keys:        map[string]string{},
+			Collections: map[string]string{},
+			Values:      map[string]string{},
+		},
+		mutexes: make(map[string]*sync.Mutex),
+		BaseMiniDB: BaseMiniDB{
+			db: path.Join(dir, filename),
+
+			mutex: &sync.Mutex{},
+		},
+	}
+
+	if content, f := ensureInitialDB(db.db); f {
+		db.writeToDB()
+	} else {
+		json.Unmarshal(content, &db.store)
+	}
+
+	return db
+}
+
 // Key creates a new key in the json.
 func (db *MiniDB) Key(key string) *MiniDB {
 	d := db.getOrCreateMutex(key)
@@ -23,29 +50,4 @@ func (db *MiniDB) Key(key string) *MiniDB {
 	db.writeToDB()
 
 	return newMiniDB(db.path, filename)
-}
-
-// this is helper for creating a new key db
-func newMiniDB(folderPath, filename string) *MiniDB {
-	db := &MiniDB{
-		store: MiniDBStore{
-			Keys:        map[string]string{},
-			Collections: map[string]string{},
-			Values:      map[string]string{},
-		},
-		mutexes: make(map[string]*sync.Mutex),
-		BaseMiniDB: BaseMiniDB{
-			db:       path.Join(folderPath, filename),
-			path:     folderPath,
-			filename: filename,
-			mutex:    &sync.Mutex{},
-		},
-	}
-	if content, f := ensureInitialDB(folderPath, db.db); f {
-		db.writeToDB()
-	} else {
-		json.Unmarshal(content, &db.store)
-	}
-
-	return db
 }

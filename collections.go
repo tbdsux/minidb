@@ -6,19 +6,17 @@ import (
 	"sync"
 )
 
-func newMiniCollection(folderPath, filename string) *MiniCollections {
+func newMiniCollection(filename string) *MiniCollections {
 	db := &MiniCollections{
 		store:   []interface{}{},
 		mutexes: make(map[int]*sync.Mutex),
 		BaseMiniDB: BaseMiniDB{
-			path:     folderPath,
-			filename: filename,
-			db:       path.Join(folderPath, filename),
-			mutex:    &sync.Mutex{},
+			db:    filename,
+			mutex: &sync.Mutex{},
 		},
 	}
 
-	if content, f := ensureInitialDB(folderPath, db.db); f {
+	if content, f := ensureInitialDB(db.db); f {
 		db.writeToDB()
 	} else {
 		json.Unmarshal(content, &db.store)
@@ -43,5 +41,5 @@ func (db *MiniDB) Collections(key string) *MiniCollections {
 	db.store.Collections[key] = filename
 	db.writeToDB()
 
-	return newMiniCollection(db.path, filename)
+	return newMiniCollection(path.Join(db.path, filename))
 }

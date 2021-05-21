@@ -7,6 +7,24 @@ import (
 	"sync"
 )
 
+func newMiniStore(filename string) *MiniStore {
+	db := &MiniStore{
+		store:   map[string]interface{}{},
+		mutexes: make(map[string]*sync.Mutex),
+		BaseMiniDB: BaseMiniDB{
+			db:    filename,
+			mutex: &sync.Mutex{},
+		},
+	}
+	if content, f := ensureInitialDB(db.db); f {
+		db.writeToDB()
+	} else {
+		json.Unmarshal(content, &db.store)
+	}
+
+	return db
+}
+
 // Store creates a new key with a given value in the json.
 func (db *MiniDB) Store(key string) *MiniStore {
 	d := db.getOrCreateMutex(key)
@@ -23,27 +41,7 @@ func (db *MiniDB) Store(key string) *MiniStore {
 	db.store.Keys[key] = filename
 	db.writeToDB()
 
-	return newMiniStore(db.path, filename)
-}
-
-func newMiniStore(folderPath, filename string) *MiniStore {
-	db := &MiniStore{
-		store:   map[string]interface{}{},
-		mutexes: make(map[string]*sync.Mutex),
-		BaseMiniDB: BaseMiniDB{
-			db:       path.Join(folderPath, filename),
-			path:     folderPath,
-			filename: filename,
-			mutex:    &sync.Mutex{},
-		},
-	}
-	if content, f := ensureInitialDB(folderPath, db.db); f {
-		db.writeToDB()
-	} else {
-		json.Unmarshal(content, &db.store)
-	}
-
-	return db
+	return newMiniStore(path.Join(db.path, filename))
 }
 
 // getValue tries to get the key from the map if exists. If value is nil,
