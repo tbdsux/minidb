@@ -43,6 +43,18 @@ type (
 )
 
 // New creates a new MiniDB struct.
-func New(folderPath string) *MiniDB {
-	return newMiniDB(folderPath, "__default.json")
+// The dir will be created if it doesn't exist.
+// It is better to use this in managing multiple json files.
+func New(dir string) *MiniDB {
+	return newMiniDB(dir, "__default.json")
+}
+
+// NewMiniStore creates and returns a new key-store collection json db.
+func NewMiniStore(dir, file string) *MiniStore {
+	return newMiniStore(dir, file)
+}
+
+// NewMiniCollections creates and returns a new collections json db.
+func NewMiniCollections(dir, file string) *MiniCollections {
+	return newMiniCollection(dir, file)
 }

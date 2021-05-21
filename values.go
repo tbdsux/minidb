@@ -7,8 +7,8 @@ import (
 	"sync"
 )
 
-// KeyStore creates a new key with a given value in the json.
-func (db *MiniDB) KeyStore(key string) *MiniStore {
+// Store creates a new key with a given value in the json.
+func (db *MiniDB) Store(key string) *MiniStore {
 	d := db.getOrCreateMutex(key)
 	d.Lock()
 	defer d.Unlock()
