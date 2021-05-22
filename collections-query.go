@@ -9,3 +9,13 @@ func (c *MiniCollections) Push(v interface{}) {
 	c.store = append(c.store, v)
 	c.writeToDB()
 }
+
+// First returns the first element of the collections.
+func (c *MiniCollections) First() interface{} {
+	return c.store[0]
+}
+
+// Last returns the last element of the collections.
+func (c *MiniCollections) Last() interface{} {
+	return c.store[len(c.store)-1]
+}
