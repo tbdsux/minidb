@@ -27,4 +27,6 @@ func TestFirstLast_Collections(t *testing.T) {
 	if db.Last().(bool) != false {
 		t.Fatal("the last element is not equal to `false`")
 	}
+
+	cleanFileAfter(filename, t)
 }
