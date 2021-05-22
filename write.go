@@ -5,9 +5,9 @@ import (
 )
 
 // writes the file
-func write(file string, data []byte) {
-	err := ioutil.WriteFile(file, data, 0755)
-	logError(err, "Error writing to DB.")
+// it just wraps the ioutil
+func write(file string, data []byte) error {
+	return ioutil.WriteFile(file, data, 0755)
 }
 
 // writeToDB write the db.store to the defined json db file.

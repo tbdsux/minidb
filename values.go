@@ -2,6 +2,7 @@ package minidb
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"path"
 	"sync"
@@ -68,4 +69,19 @@ func (db *MiniStore) Set(key string, v interface{}) {
 
 	db.store[key] = v
 	db.writeToDB()
+}
+
+// Write takes a struct and writes it to the json file.
+// It accepts a new struct object and encodes and write it.
+func (db *MiniStore) Write(v interface{}) error {
+	d, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(string(d))
+
+	defer json.Unmarshal(d, &db.store)
+
+	return write(db.db, d)
 }
