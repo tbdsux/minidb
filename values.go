@@ -2,6 +2,7 @@ package minidb
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"path"
@@ -47,12 +48,9 @@ func (db *MiniDB) Store(key string) *MiniStore {
 
 // getValue tries to get the key from the map if exists. If value is nil,
 // It will log error that the key is unknown.
+// It just wraps around getValueOK.
 func (db *MiniStore) getValue(key string) interface{} {
-	d := db.getOrCreateMutex(key)
-	d.Lock()
-	defer d.Unlock()
-
-	value, ok := db.store[key]
+	value, ok := db.getValueOK(key)
 
 	if !ok {
 		log.Fatalf("Unknown key: %s", key)
@@ -61,14 +59,31 @@ func (db *MiniStore) getValue(key string) interface{} {
 	return value
 }
 
-// Set sets the store[key] to v.
-func (db *MiniStore) Set(key string, v interface{}) {
-	d := db.getOrCreateMutex(key)
+// it just returns the value of the key
+func (db *MiniStore) getValueOK(key string) (interface{}, bool) {
+	d := db.getOrCreateMutex("get_" + key)
 	d.Lock()
 	defer d.Unlock()
 
+	value, ok := db.store[key]
+	return value, ok
+}
+
+// Set sets the store[key] to v.
+func (db *MiniStore) Set(key string, v interface{}) error {
+	d := db.getOrCreateMutex("write_" + key)
+	d.Lock()
+	defer d.Unlock()
+
+	_, ok := db.getValueOK(key)
+	if ok {
+		return errors.New("key already exists")
+	}
+
 	db.store[key] = v
 	db.writeToDB()
+
+	return nil
 }
 
 // Write takes a struct and writes it to the json file.

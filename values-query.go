@@ -1,5 +1,35 @@
 package minidb
 
+import "errors"
+
+// Update updates the key's value. It returns nil if updated.
+func (db *MiniStore) Update(key string, v interface{}) error {
+	defer db.writeToDB()
+
+	if _, ok := db.store[key]; !ok {
+		return errors.New("unknown key")
+	}
+
+	db.store[key] = v
+
+	return nil
+}
+
+// Remove attemps to remove the key from the db if it exists.
+// It returns nil if it is removed
+func (db *MiniStore) Remove(key string) error {
+	defer db.writeToDB()
+
+	if _, ok := db.store[key]; !ok {
+		return errors.New("key does not exists")
+	}
+
+	// remove
+	delete(db.store, key)
+
+	return nil
+}
+
 // GetBool finds the key with bool value and returns if exits.
 func (db *MiniStore) GetBool(key string) bool {
 	defer recoverAssertion()
