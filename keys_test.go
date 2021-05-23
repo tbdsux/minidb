@@ -10,5 +10,6 @@ func TestKeys_FileContent(t *testing.T) {
 	New(f)
 
 	checkFileContent(path.Join(f, "__default.json"), `{"keys":{},"collections":{},"values":{}}`, t)
-	cleanFileAfter(path.Join(f, "__default.json"), t)
+
+	defer cleanFileAfter(f, t)
 }

@@ -4,16 +4,20 @@ import "testing"
 
 func TestPush_Collections(t *testing.T) {
 	filename := "pushcols.json"
-	db := NewMiniCollections(filename)
 
+	defer cleanFileAfter(filename, t)
+
+	db := NewMiniCollections(filename)
 	db.Push([]int{1, 2, 3, 4, 5})
 
 	checkFileContent(filename, "[[1,2,3,4,5]]", t)
-	cleanFileAfter(filename, t)
 }
 
 func TestFirstLast_Collections(t *testing.T) {
 	filename := "firstcols.json"
+
+	defer cleanFileAfter(filename, t)
+
 	db := NewMiniCollections(filename)
 
 	db.Push("hello")
@@ -27,6 +31,4 @@ func TestFirstLast_Collections(t *testing.T) {
 	if db.Last().(bool) != false {
 		t.Fatal("the last element is not equal to `false`")
 	}
-
-	cleanFileAfter(filename, t)
 }
