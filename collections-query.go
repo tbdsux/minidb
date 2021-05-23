@@ -19,3 +19,15 @@ func (c *MiniCollections) First() interface{} {
 func (c *MiniCollections) Last() interface{} {
 	return c.store[len(c.store)-1]
 }
+
+// Find attemps to find the value from the store and returns it's index.
+// If it doesn't exist, it will return -1.
+func (c *MiniCollections) Find(v interface{}) int {
+	for index, value := range c.store {
+		if value == v {
+			return index
+		}
+	}
+
+	return -1
+}

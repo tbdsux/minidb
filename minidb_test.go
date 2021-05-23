@@ -1,7 +1,6 @@
 package minidb
 
 import (
-	"path"
 	"testing"
 )
 
@@ -9,7 +8,7 @@ func TestNew(t *testing.T) {
 	dirname := "sampledir"
 	New(dirname)
 
-	cleanFileAfter(path.Join(dirname, "__default.json"), t)
+	cleanFileAfter(dirname, t)
 }
 
 func TestNewMiniCollections(t *testing.T) {
