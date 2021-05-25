@@ -26,7 +26,7 @@ type (
 	MiniDBStore struct {
 		Keys        map[string]string `json:"keys"`
 		Collections map[string]string `json:"collections"`
-		Values      map[string]string `json:"values"`
+		Store       map[string]string `json:"store"`
 	}
 
 	// MiniCollections is a collections store.

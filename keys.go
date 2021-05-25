@@ -14,7 +14,7 @@ func newMiniDB(dir, filename string) *MiniDB {
 		store: MiniDBStore{
 			Keys:        map[string]string{},
 			Collections: map[string]string{},
-			Values:      map[string]string{},
+			Store:       map[string]string{},
 		},
 		mutexes: make(map[string]*sync.Mutex),
 		BaseMiniDB: BaseMiniDB{
