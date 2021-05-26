@@ -4,7 +4,9 @@ import "errors"
 
 // Update updates the key's value. It returns nil if updated.
 func (db *MiniStore) Update(key string, v interface{}) error {
-	defer db.writeToDB()
+	d := db.getOrCreateMutex("store_update_" + key)
+	d.Lock()
+	defer d.Unlock()
 
 	if _, ok := db.store[key]; !ok {
 		return errors.New("unknown key")
@@ -12,13 +14,17 @@ func (db *MiniStore) Update(key string, v interface{}) error {
 
 	db.store[key] = v
 
+	db.writeToDB()
+
 	return nil
 }
 
 // Remove attemps to remove the key from the db if it exists.
 // It returns nil if it is removed
 func (db *MiniStore) Remove(key string) error {
-	defer db.writeToDB()
+	d := db.getOrCreateMutex("store_remove_" + key)
+	d.Lock()
+	defer d.Unlock()
 
 	if _, ok := db.store[key]; !ok {
 		return errors.New("key does not exists")
@@ -26,6 +32,8 @@ func (db *MiniStore) Remove(key string) error {
 
 	// remove
 	delete(db.store, key)
+
+	db.writeToDB()
 
 	return nil
 }

@@ -3,7 +3,6 @@ package minidb
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"log"
 	"path"
 	"sync"
@@ -29,7 +28,7 @@ func newMiniStore(filename string) *MiniStore {
 
 // Store creates a new key with a given value in the json.
 func (db *MiniDB) Store(key string) *MiniStore {
-	d := db.getOrCreateMutex(key)
+	d := db.getOrCreateMutex("store_" + key)
 	d.Lock()
 	defer d.Unlock()
 
@@ -94,9 +93,7 @@ func (db *MiniStore) Write(v interface{}) error {
 		return err
 	}
 
-	fmt.Println(string(d))
-
-	defer json.Unmarshal(d, &db.store)
+	json.Unmarshal(d, &db.store)
 
 	return write(db.db, d)
 }

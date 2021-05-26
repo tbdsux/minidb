@@ -27,7 +27,7 @@ func newMiniCollection(filename string) *MiniCollections {
 
 // Collections creates a new key with an array / slice value.
 func (db *MiniDB) Collections(key string) *MiniCollections {
-	d := db.getOrCreateMutex(key)
+	d := db.getOrCreateMutex("cols_" + key)
 	d.Lock()
 	defer d.Unlock()
 

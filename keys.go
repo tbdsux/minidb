@@ -35,7 +35,7 @@ func newMiniDB(dir, filename string) *MiniDB {
 
 // Key creates a new key in the json.
 func (db *MiniDB) Key(key string) *MiniDB {
-	d := db.getOrCreateMutex(key)
+	d := db.getOrCreateMutex("keys_" + key)
 	d.Lock()
 	defer d.Unlock()
 
