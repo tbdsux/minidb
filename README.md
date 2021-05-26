@@ -1,5 +1,7 @@
 # minidb
 
+[![Test Status](https://github.com/TheBoringDude/minidb/workflows/Test/badge.svg)](https://github.com/TheBoringDude/minidb/actions)
+
 a simple multi-flat-files json database
 
 This has a really weird structure and api and **I know it :happy:**

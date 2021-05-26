@@ -4,7 +4,7 @@ import (
 	"sync"
 )
 
-const Version = "0.0.1"
+const Version = "0.1.0"
 
 type (
 	// BaseMiniDB is the base db structure.
