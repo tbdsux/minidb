@@ -98,3 +98,31 @@ func (db *MiniStore) Write(v interface{}) error {
 
 	return write(db.db, d)
 }
+
+// Read parses the contents of db.store to v which is a struct object.
+// It just wraps around `json.Marshal` and `json.Unmarshal`.
+func (db *MiniStore) Read(v interface{}) error {
+	d, err := json.Marshal(db.store)
+	if err != nil {
+		return err
+	}
+
+	return json.Unmarshal(d, v)
+}
+
+// ReadKey parses the contents of db.store[key] to v which is a struct object.
+// It is better to use this if the value of key is a map.
+// It just wraps around `json.Marshal` and `json.Unmarshal`.
+func (db *MiniStore) ReadKey(key string, v interface{}) error {
+	value, ok := db.getValueOK(key)
+	if !ok {
+		return errors.New("key does not exist")
+	}
+
+	d, err := json.Marshal(value)
+	if err != nil {
+		return err
+	}
+
+	return json.Unmarshal(d, v)
+}
