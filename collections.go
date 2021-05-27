@@ -6,6 +6,7 @@ import (
 	"sync"
 )
 
+// base function for creating a new collection
 func newMiniCollection(filename string) *MiniCollections {
 	db := &MiniCollections{
 		store:   []interface{}{},

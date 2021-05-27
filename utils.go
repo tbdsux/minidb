@@ -36,7 +36,7 @@ func marshalStore(v interface{}) []byte {
 	return d
 }
 
-//
+// recover panic on type assertions
 func recoverAssertion() {
 	if r := recover(); r != nil {
 		log.Fatalln(r)

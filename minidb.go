@@ -45,7 +45,7 @@ type (
 )
 
 // New creates a new MiniDB struct.
-// The dir will be created if it doesn't exist.
+// The dir will be created if it doesn't exist and a file named `__default.json` will also be generated.
 // It is better to use this in managing multiple json files.
 func New(dir string) *MiniDB {
 	return newMiniDB(dir, "__default.json")

@@ -34,6 +34,7 @@ func newMiniDB(dir, filename string) *MiniDB {
 }
 
 // Key creates a new key in the json.
+// It is better to use this for nesting and only if needed.
 func (db *MiniDB) Key(key string) *MiniDB {
 	d := db.getOrCreateMutex("keys_" + key)
 	d.Lock()

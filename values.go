@@ -8,6 +8,7 @@ import (
 	"sync"
 )
 
+// base functions for creating a new store
 func newMiniStore(filename string) *MiniStore {
 	db := &MiniStore{
 		store:   map[string]interface{}{},
