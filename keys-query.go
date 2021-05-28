@@ -21,7 +21,7 @@ func (db *MiniDB) FindKey(key string) (string, error) {
 // FindCollection gets the key in the keys map and returns its corresponding filename.
 // It returns nil if it exists.
 func (db *MiniDB) FindCollection(key string) (string, error) {
-	filename, ok := db.store.Keys[key]
+	filename, ok := db.store.Collections[key]
 
 	if !ok {
 		return "", errors.New("the key does not exist")
@@ -33,7 +33,7 @@ func (db *MiniDB) FindCollection(key string) (string, error) {
 // FindStore gets the key in the keys map and returns its corresponding filename.
 // It returns nil if it exists.
 func (db *MiniDB) FindStore(key string) (string, error) {
-	filename, ok := db.store.Keys[key]
+	filename, ok := db.store.Store[key]
 
 	if !ok {
 		return "", errors.New("the key does not exist")
