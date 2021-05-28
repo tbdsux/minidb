@@ -60,3 +60,25 @@ func NewMiniStore(f string) *MiniStore {
 func NewMiniCollections(f string) *MiniCollections {
 	return newMiniCollection(f)
 }
+
+// ListCollections returns the list of collections created.
+func (db *MiniDB) ListCollections() []string {
+	cols := []string{}
+
+	for i := range db.store.Collections {
+		cols = append(cols, i)
+	}
+
+	return cols
+}
+
+// ListCollections returns the list of collections created.
+func (db *MiniDB) ListStores() []string {
+	stores := []string{}
+
+	for i := range db.store.Store {
+		stores = append(stores, i)
+	}
+
+	return stores
+}
