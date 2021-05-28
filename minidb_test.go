@@ -2,6 +2,7 @@ package minidb
 
 import (
 	"reflect"
+	"sort"
 	"testing"
 )
 
@@ -37,6 +38,7 @@ func TestListCollections(t *testing.T) {
 	db.Collections("zoo")
 
 	listCols := db.ListCollections()
+	sort.Strings(listCols) // need to sort like the values below, since it can be different at any time
 	sampleReturn := []string{"new", "sample", "zoo"}
 
 	if !reflect.DeepEqual(listCols, sampleReturn) {
@@ -55,7 +57,7 @@ func TestListStores(t *testing.T) {
 	db.Store("zoo")
 
 	listStores := db.ListStores()
-
+	sort.Strings(listStores) // need to sort like the values below, since it can be different at any time
 	sampleReturn := []string{"new", "sample", "zoo"}
 
 	if !reflect.DeepEqual(listStores, sampleReturn) {
