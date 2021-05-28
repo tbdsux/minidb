@@ -1,7 +1,6 @@
 package minidb
 
 import (
-	"fmt"
 	"reflect"
 	"testing"
 )
@@ -45,7 +44,7 @@ func TestListCollections(t *testing.T) {
 	}
 }
 
-func TestListSTORES(t *testing.T) {
+func TestListStores(t *testing.T) {
 	dir := "many-stores"
 
 	defer cleanFileAfter(dir, t)
@@ -56,7 +55,6 @@ func TestListSTORES(t *testing.T) {
 	db.Store("zoo")
 
 	listStores := db.ListStores()
-	fmt.Println(listStores)
 
 	sampleReturn := []string{"new", "sample", "zoo"}
 
