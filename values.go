@@ -35,12 +35,12 @@ func (db *MiniDB) Store(key string) *MiniStore {
 
 	// if the key exists, get the file's name,
 	// otherwise, create a new one
-	filename, ok := db.store.Keys[key]
+	filename, ok := db.store.Store[key]
 	if !ok {
 		filename = generateFileName("store")
 	}
 
-	db.store.Keys[key] = filename
+	db.store.Store[key] = filename
 	db.writeToDB()
 
 	return newMiniStore(path.Join(db.path, filename))
