@@ -12,6 +12,11 @@ func (c *MiniCollections) Push(v interface{}) {
 	c.writeToDB()
 }
 
+// List returns all of the contents of the collection
+func (c *MiniCollections) List() []interface{} {
+	return c.store
+}
+
 // First returns the first element of the collections.
 func (c *MiniCollections) First() interface{} {
 	return c.store[0]
