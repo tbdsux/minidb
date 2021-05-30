@@ -103,3 +103,15 @@ func (db *MiniStore) GetFloat64Slice(key string) []float64 {
 func (db *MiniStore) Get(key string) (interface{}, bool) {
 	return db.getValueOK(key)
 }
+
+// IsExists asserts if the key exists. You should use Get() if you want to get
+// the Raw value and if it exists.
+func (db *MiniStore) IsExists(key string) bool {
+	_, ok := db.getValueOK(key)
+	return ok
+}
+
+// List returns the content of db.store
+func (db *MiniStore) List() map[string]interface{} {
+	return db.store
+}
