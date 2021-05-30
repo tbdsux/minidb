@@ -3,7 +3,6 @@ package minidb
 import (
 	"encoding/json"
 	"errors"
-	"log"
 	"os"
 
 	"github.com/segmentio/ksuid"
@@ -34,11 +33,4 @@ func marshalStore(v interface{}) []byte {
 	logError(err, "error tring to marshall struct")
 
 	return d
-}
-
-// recover panic on type assertions
-func recoverAssertion() {
-	if r := recover(); r != nil {
-		log.Fatalln(r)
-	}
 }
