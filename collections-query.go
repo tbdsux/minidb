@@ -81,3 +81,55 @@ func (c *MiniCollections) MatchStringAll(v string) ([]string, error) {
 
 	return values, nil
 }
+
+// FilterString returns all string elements.
+func (c *MiniCollections) FilterString() []string {
+	values := []string{}
+
+	for _, i := range c.store {
+		if v, ok := i.(string); ok {
+			values = append(values, v)
+		}
+	}
+
+	return values
+}
+
+// FilterInt returns all int elements.
+func (c *MiniCollections) FilterInt() []int {
+	values := []int{}
+
+	for _, i := range c.store {
+		if v, ok := i.(int); ok {
+			values = append(values, v)
+		}
+	}
+
+	return values
+}
+
+// FilterBool returns all bool elements.
+func (c *MiniCollections) FilterBool() []bool {
+	values := []bool{}
+
+	for _, i := range c.store {
+		if v, ok := i.(bool); ok {
+			values = append(values, v)
+		}
+	}
+
+	return values
+}
+
+// FilterFloat returns all float elements (uses float64). Some integers (int) might be included.
+func (c *MiniCollections) FilterFloat() []float64 {
+	values := []float64{}
+
+	for _, i := range c.store {
+		if v, ok := i.(float64); ok {
+			values = append(values, v)
+		}
+	}
+
+	return values
+}

@@ -1,6 +1,9 @@
 package minidb
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestPush_Collections(t *testing.T) {
 	filename := "pushcols.json"
@@ -97,5 +100,33 @@ func TestMatchStringAll_Collections(t *testing.T) {
 	sampleReturn := []string{"hellox", "hello_world"}
 	if values, _ := db.MatchStringAll("hello"); values[0] != sampleReturn[0] || values[1] != sampleReturn[1] {
 		t.Fatal("wrong return value from match string all")
+	}
+}
+
+func TestFilter(t *testing.T) {
+	filename := "filter.json"
+	defer cleanFileAfter(filename, t)
+
+	db := NewMiniCollections(filename)
+
+	db.Push("hellox")
+	db.Push("sample")
+	db.Push(1)
+	db.Push(100)
+	db.Push(false)
+
+	frString := []string{"hellox", "sample"}
+	if !reflect.DeepEqual(db.FilterString(), frString) {
+		t.Fatal("wrong filter string output")
+	}
+
+	frInt := []int{1, 100}
+	if !reflect.DeepEqual(db.FilterInt(), frInt) {
+		t.Fatal("wrong filter int output")
+	}
+
+	frBool := []bool{false}
+	if !reflect.DeepEqual(db.FilterBool(), frBool) {
+		t.Fatal("wrong filter bool output")
 	}
 }
