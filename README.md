@@ -39,6 +39,9 @@ cols.Push(map[string]string{
     "content": "This is just something, maybe a content or not. I don't know how it works though.",
 })
 
+// multiple elements is possible
+cols.Push(100, 20, "sample", false, []int{1,2,3,4,5})
+
 fmt.Println(cols)
 ```
 

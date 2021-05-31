@@ -11,9 +11,9 @@ func TestPush_Collections(t *testing.T) {
 	defer cleanFileAfter(filename, t)
 
 	db := NewMiniCollections(filename)
-	db.Push([]int{1, 2, 3, 4, 5})
+	db.Push([]int{1, 2, 3, 4, 5}, "sample")
 
-	checkFileContent(filename, "[[1,2,3,4,5]]", t)
+	checkFileContent(filename, `[[1,2,3,4,5],"sample"]`, t)
 }
 
 func TestFirstLast_Collections(t *testing.T) {
