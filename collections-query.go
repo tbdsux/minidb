@@ -1,6 +1,59 @@
 package minidb
 
-import "strings"
+import (
+	"errors"
+	"strings"
+)
+
+// Remove removes the first element that is equal to v.
+func (c *MiniCollections) Remove(v interface{}) error {
+	return c.RemoveMany(v, 1)
+}
+
+// RemoveAll removes all elements that are equal to v.
+func (c *MiniCollections) RemoveAll(v interface{}) error {
+	return c.RemoveMany(v, -1)
+}
+
+// RemoveMany removes the number of elements corresponding to l. Use RemoveAll() for removing all elements.
+// `l` cannot be less than -1 or equal to 0.
+func (c *MiniCollections) RemoveMany(v interface{}, l int) error {
+	if l < -1 || l == 0 {
+		return errors.New("l cannot be less than -1 or equal to 0")
+	}
+
+	d := c.getOrCreateMutex(len(c.store) + l)
+	d.Lock()
+	defer d.Unlock()
+
+	values := []interface{}{}
+	removed := []interface{}{}
+
+	for index, x := range c.store {
+		// -1 means remove all similar values
+		if l > 0 {
+			// check if total is similar
+			if len(removed) == l {
+				values = append(values, c.store[index:]...)
+				break
+			}
+		}
+
+		// if x is same with v, append it to removed
+		// otherwise, to the new values
+		if v == x {
+			removed = append(removed, x)
+		} else {
+			values = append(values, x)
+		}
+	}
+
+	// write new values
+	c.store = values
+	c.writeToDB()
+
+	return nil
+}
 
 // Push adds an item to the store slice.
 func (c *MiniCollections) Push(v interface{}) {

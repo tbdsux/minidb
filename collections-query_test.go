@@ -130,3 +130,27 @@ func TestFilter(t *testing.T) {
 		t.Fatal("wrong filter bool output")
 	}
 }
+
+func TestRemove(t *testing.T) {
+	filename := "removecols.json"
+	defer cleanFileAfter(filename, t)
+
+	db := NewMiniCollections(filename)
+	db.Push("sample")
+	db.Push("another")
+	db.Push(100)
+	db.Push(9023423489)
+	db.Push("sample")
+	db.Push(false)
+	db.Push("sample")
+
+	db.RemoveAll("sample")
+	if len(db.FindAll("sample")) > 1 {
+		t.Fatal("some items are not removed")
+	}
+
+	db.Remove(100)
+	if db.Find(100) != -1 {
+		t.Fatal("item is not removed")
+	}
+}
