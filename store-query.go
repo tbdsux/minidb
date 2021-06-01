@@ -8,11 +8,11 @@ func (db *MiniStore) Update(key string, v interface{}) error {
 	d.Lock()
 	defer d.Unlock()
 
-	if _, ok := db.store[key]; !ok {
+	if _, ok := db.content[key]; !ok {
 		return errors.New("unknown key")
 	}
 
-	db.store[key] = v
+	db.content[key] = v
 
 	db.writeToDB()
 
@@ -26,12 +26,12 @@ func (db *MiniStore) Remove(key string) error {
 	d.Lock()
 	defer d.Unlock()
 
-	if _, ok := db.store[key]; !ok {
+	if _, ok := db.content[key]; !ok {
 		return errors.New("key does not exists")
 	}
 
 	// remove
-	delete(db.store, key)
+	delete(db.content, key)
 
 	db.writeToDB()
 
@@ -113,5 +113,5 @@ func (db *MiniStore) IsExists(key string) bool {
 
 // List returns the content of db.store
 func (db *MiniStore) List() map[string]interface{} {
-	return db.store
+	return db.content
 }

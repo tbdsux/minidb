@@ -7,9 +7,9 @@ import (
 )
 
 // base function for creating a new collection
-func newMiniCollection(filename string) *MiniCollections {
+func minicollection(filename string) *MiniCollections {
 	db := &MiniCollections{
-		store:   []interface{}{},
+		content:   []interface{}{},
 		mutexes: make(map[int]*sync.Mutex),
 		BaseMiniDB: BaseMiniDB{
 			db:    filename,
@@ -20,7 +20,7 @@ func newMiniCollection(filename string) *MiniCollections {
 	if content, f := ensureInitialDB(db.db); f {
 		db.writeToDB()
 	} else {
-		json.Unmarshal(content, &db.store)
+		json.Unmarshal(content, &db.content)
 	}
 
 	return db
@@ -34,13 +34,13 @@ func (db *MiniDB) Collections(key string) *MiniCollections {
 
 	// if the key exists, get the file's name,
 	// otherwise, create a new one
-	filename, ok := db.store.Collections[key]
+	filename, ok := db.content.Collections[key]
 	if !ok {
 		filename = generateFileName("cols")
 	}
 
-	db.store.Collections[key] = filename
+	db.content.Collections[key] = filename
 	db.writeToDB()
 
-	return newMiniCollection(path.Join(db.path, filename))
+	return minicollection(path.Join(db.path, filename))
 }

@@ -7,11 +7,11 @@ import (
 )
 
 // this is helper for creating a new key db
-func newMiniDB(dir, filename string) *MiniDB {
+func minidb(dir, filename string) *MiniDB {
 	db := &MiniDB{
 		path:     dir,
 		filename: filename,
-		store: MiniDBStore{
+		content: MiniDBContent{
 			Keys:        map[string]string{},
 			Collections: map[string]string{},
 			Store:       map[string]string{},
@@ -27,7 +27,7 @@ func newMiniDB(dir, filename string) *MiniDB {
 	if content, f := ensureInitialDB(db.db); f {
 		db.writeToDB()
 	} else {
-		json.Unmarshal(content, &db.store)
+		json.Unmarshal(content, &db.content)
 	}
 
 	return db
@@ -42,13 +42,13 @@ func (db *MiniDB) Key(key string) *MiniDB {
 
 	// if the key exists, get the file's name,
 	// otherwise, create a new one
-	filename, ok := db.store.Keys[key]
+	filename, ok := db.content.Keys[key]
 	if !ok {
 		filename = generateFileName("key")
 	}
 
-	db.store.Keys[key] = filename
+	db.content.Keys[key] = filename
 	db.writeToDB()
 
-	return newMiniDB(db.path, filename)
+	return minidb(db.path, filename)
 }

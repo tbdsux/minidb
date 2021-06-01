@@ -9,7 +9,7 @@ import (
 // FindKey gets the key in the keys map and returns its corresponding filename.
 // It returns nil if it exists.
 func (db *MiniDB) FindKey(key string) (string, error) {
-	filename, ok := db.store.Keys[key]
+	filename, ok := db.content.Keys[key]
 
 	if !ok {
 		return "", errors.New("the key does not exist")
@@ -21,7 +21,7 @@ func (db *MiniDB) FindKey(key string) (string, error) {
 // FindCollection gets the key in the keys map and returns its corresponding filename.
 // It returns nil if it exists.
 func (db *MiniDB) FindCollection(key string) (string, error) {
-	filename, ok := db.store.Collections[key]
+	filename, ok := db.content.Collections[key]
 
 	if !ok {
 		return "", errors.New("the key does not exist")
@@ -33,7 +33,7 @@ func (db *MiniDB) FindCollection(key string) (string, error) {
 // FindStore gets the key in the keys map and returns its corresponding filename.
 // It returns nil if it exists.
 func (db *MiniDB) FindStore(key string) (string, error) {
-	filename, ok := db.store.Store[key]
+	filename, ok := db.content.Store[key]
 
 	if !ok {
 		return "", errors.New("the key does not exist")
@@ -50,13 +50,13 @@ func (db *MiniDB) RemoveCollection(key string) error {
 	defer d.Unlock()
 
 	// get the filename if it exists
-	filename, ok := db.store.Collections[key]
+	filename, ok := db.content.Collections[key]
 	if !ok {
 		return errors.New("collections key does not exist")
 	}
 
 	// remove the key and the filename
-	delete(db.store.Collections, key)
+	delete(db.content.Collections, key)
 
 	return os.RemoveAll(path.Join(db.path, filename))
 }
@@ -69,13 +69,13 @@ func (db *MiniDB) RemoveStore(key string) error {
 	defer d.Unlock()
 
 	// get the filename if it exists
-	filename, ok := db.store.Store[key]
+	filename, ok := db.content.Store[key]
 	if !ok {
 		return errors.New("collections key does not exist")
 	}
 
 	// remove the key and the filename
-	delete(db.store.Store, key)
+	delete(db.content.Store, key)
 
 	return os.RemoveAll(path.Join(db.path, filename))
 }
@@ -88,13 +88,13 @@ func (db *MiniDB) RemoveKey(key string) error {
 	defer d.Unlock()
 
 	// get the filename if it exists
-	filename, ok := db.store.Keys[key]
+	filename, ok := db.content.Keys[key]
 	if !ok {
 		return errors.New("collections key does not exist")
 	}
 
 	// remove the key and the filename
-	delete(db.store.Keys, key)
+	delete(db.content.Keys, key)
 
 	return os.RemoveAll(path.Join(db.path, filename))
 }

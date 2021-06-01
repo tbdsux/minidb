@@ -9,9 +9,9 @@ import (
 )
 
 // base functions for creating a new store
-func newMiniStore(filename string) *MiniStore {
+func ministore(filename string) *MiniStore {
 	db := &MiniStore{
-		store:   map[string]interface{}{},
+		content:   map[string]interface{}{},
 		mutexes: make(map[string]*sync.Mutex),
 		BaseMiniDB: BaseMiniDB{
 			db:    filename,
@@ -21,7 +21,7 @@ func newMiniStore(filename string) *MiniStore {
 	if content, f := ensureInitialDB(db.db); f {
 		db.writeToDB()
 	} else {
-		json.Unmarshal(content, &db.store)
+		json.Unmarshal(content, &db.content)
 	}
 
 	return db
@@ -35,15 +35,15 @@ func (db *MiniDB) Store(key string) *MiniStore {
 
 	// if the key exists, get the file's name,
 	// otherwise, create a new one
-	filename, ok := db.store.Store[key]
+	filename, ok := db.content.Store[key]
 	if !ok {
 		filename = generateFileName("store")
 	}
 
-	db.store.Store[key] = filename
+	db.content.Store[key] = filename
 	db.writeToDB()
 
-	return newMiniStore(path.Join(db.path, filename))
+	return ministore(path.Join(db.path, filename))
 }
 
 // getValue tries to get the key from the map if exists. If value is nil,
@@ -65,7 +65,7 @@ func (db *MiniStore) getValueOK(key string) (interface{}, bool) {
 	d.Lock()
 	defer d.Unlock()
 
-	value, ok := db.store[key]
+	value, ok := db.content[key]
 	return value, ok
 }
 
@@ -80,7 +80,7 @@ func (db *MiniStore) Set(key string, v interface{}) error {
 		return errors.New("key already exists")
 	}
 
-	db.store[key] = v
+	db.content[key] = v
 	db.writeToDB()
 
 	return nil
@@ -94,7 +94,7 @@ func (db *MiniStore) Write(v interface{}) error {
 		return err
 	}
 
-	json.Unmarshal(d, &db.store)
+	json.Unmarshal(d, &db.content)
 
 	return write(db.db, d)
 }
@@ -102,7 +102,7 @@ func (db *MiniStore) Write(v interface{}) error {
 // Read parses the contents of db.store to v which is a struct object.
 // It just wraps around `json.Marshal` and `json.Unmarshal`.
 func (db *MiniStore) Read(v interface{}) error {
-	d, err := json.Marshal(db.store)
+	d, err := json.Marshal(db.content)
 	if err != nil {
 		return err
 	}

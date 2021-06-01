@@ -22,7 +22,7 @@ func TestNewMiniCollections(t *testing.T) {
 
 func TestNewMiniStore(t *testing.T) {
 	file := "store.json"
-	newMiniStore(file)
+	NewMiniStore(file)
 
 	cleanFileAfter(file, t)
 }

@@ -27,7 +27,7 @@ func generateFileName(k string) string {
 	return k + "." + generateId() + ".json"
 }
 
-// return the marshalled db.store
+// json marshalling wrapper
 func marshalStore(v interface{}) []byte {
 	d, err := json.Marshal(v)
 	logError(err, "error tring to marshall struct")
