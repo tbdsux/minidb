@@ -1,6 +1,9 @@
 package minidb
 
-import "errors"
+import (
+	"errors"
+	"strings"
+)
 
 // Update updates the key's value. It returns nil if updated.
 func (db *MiniStore) Update(key string, v interface{}) error {
@@ -114,4 +117,18 @@ func (db *MiniStore) IsExists(key string) bool {
 // List returns the content of db.store
 func (db *MiniStore) List() map[string]interface{} {
 	return db.content
+}
+
+// FindKeys finds all the keys that contains `key`. It will return only all of the matched keys.
+// This is useful for searching keys.
+func (db *MiniStore) FindKey(key string) []string {
+	result := []string{}
+	
+	for i := range db.content {
+		if strings.Contains(i, key) {
+			result = append(result, i)
+		}
+	}
+
+	return result
 }

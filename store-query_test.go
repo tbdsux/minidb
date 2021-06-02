@@ -1,6 +1,10 @@
 package minidb
 
-import "testing"
+import (
+	"reflect"
+	"sort"
+	"testing"
+)
 
 func TestGetQuery(t *testing.T) {
 	defer cleanFileAfter("getstore.json", t)
@@ -41,4 +45,28 @@ func TestUpdateQuery(t *testing.T) {
 	if db.GetBool("value") != true {
 		t.Fatal("update is not working ")
 	}
+}
+
+
+func TestFindKeyQuery(t *testing.T) {
+	filename := "findstore.json"
+
+	defer cleanFileAfter(filename, t)
+
+	db := NewMiniStore(filename)
+	db.Set("hello", "world")
+	db.Set("hellox", "x hello")
+	db.Set("hell", false)
+	db.Set("sample", false)
+	db.Set("number", 100)
+
+	expected := []string{"hell", "hello", "hellox"}
+	r := db.FindKey("hell")
+	sort.Strings(r)
+
+	if !reflect.DeepEqual(expected, r) {
+		t.Fatal("values returned from findkey are not equal")
+	}
+
+	
 }
