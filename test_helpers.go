@@ -11,7 +11,7 @@ import (
 // removes the f which could be the created file or folder
 func cleanFileAfter(f string, t *testing.T) {
 	if !isPathExists(f) {
-		t.Fatal("Default json db file: `__default.json` does not exist!")
+		t.Fatalf("Path / file : `%s` does not exist!\n", f)
 	} else {
 		// clean dir
 		os.RemoveAll(f)

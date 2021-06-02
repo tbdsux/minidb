@@ -23,9 +23,7 @@ func TestFirstLast_Collections(t *testing.T) {
 
 	db := NewMiniCollections(filename)
 
-	db.Push("hello")
-	db.Push(1000)
-	db.Push(false)
+	db.Push("hello", 1000, false)
 
 	if db.First().(string) != "hello" {
 		t.Fatal("the first element is not equal to `hello`")
@@ -43,11 +41,7 @@ func TestFind_Collections(t *testing.T) {
 
 	db := NewMiniCollections(filename)
 
-	db.Push("hello")
-	db.Push(1000)
-	db.Push(false)
-	db.Push("THIN")
-	db.Push("sample")
+	db.Push("hello", 1000, false, "THIN", "sample")
 
 	if db.Find("THIN") != 3 || db.Find("hello") != 0 || db.Find(1000) != 1 {
 		t.Fatal("wrong index value from find")
@@ -60,10 +54,7 @@ func TestFindAll_Collections(t *testing.T) {
 
 	db := NewMiniCollections(filename)
 
-	db.Push("hello")
-	db.Push(1)
-	db.Push(true)
-	db.Push("hello")
+	db.Push("hello", 1, true, "hello")
 
 	if len(db.FindAll("hello")) != 2 {
 		t.Fatal("wrong return length from db.FindAll")
@@ -76,10 +67,7 @@ func TestMatchString_Collections(t *testing.T) {
 
 	db := NewMiniCollections(filename)
 
-	db.Push("hello")
-	db.Push(1)
-	db.Push(true)
-	db.Push("hello")
+	db.Push("hello", 1, true, "hello")
 
 	if value, _ := db.MatchString("he"); value != "hello" {
 		t.Fatal("wrong match")
@@ -92,10 +80,7 @@ func TestMatchStringAll_Collections(t *testing.T) {
 
 	db := NewMiniCollections(filename)
 
-	db.Push("hellox")
-	db.Push(1)
-	db.Push(true)
-	db.Push("hello_world")
+	db.Push("hellox", 1, true, "hello_world")
 
 	sampleReturn := []string{"hellox", "hello_world"}
 	if values, _ := db.MatchStringAll("hello"); values[0] != sampleReturn[0] || values[1] != sampleReturn[1] {
@@ -109,11 +94,7 @@ func TestFilter(t *testing.T) {
 
 	db := NewMiniCollections(filename)
 
-	db.Push("hellox")
-	db.Push("sample")
-	db.Push(1)
-	db.Push(100)
-	db.Push(false)
+	db.Push("hellox", "sample", 1, 100, false)
 
 	frString := []string{"hellox", "sample"}
 	if !reflect.DeepEqual(db.FilterString(), frString) {
@@ -136,16 +117,10 @@ func TestRemove(t *testing.T) {
 	defer cleanFileAfter(filename, t)
 
 	db := NewMiniCollections(filename)
-	db.Push("sample")
-	db.Push("another")
-	db.Push(100)
-	db.Push(9023423489)
-	db.Push("sample")
-	db.Push(false)
-	db.Push("sample")
+	db.Push("sample", "another", 100, 9023423489, "sample", false, "sample")
 
 	db.RemoveAll("sample")
-	if len(db.FindAll("sample")) > 1 {
+	if len(db.FindAll("sample")) > 0 {
 		t.Fatal("some items are not removed")
 	}
 
