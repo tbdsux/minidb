@@ -18,6 +18,8 @@ All operations are just appending and setting in a `map[string]interface{}` or `
 
 In all operations, it writes to the json file. I think it is not a good idea?
 
+#### Full Doc: https://pkg.go.dev/github.com/TheBoringDude/minidb
+
 ### MiniDB
 
 It takes a directory and manages all files within it. It is better only to use this when trying to manage multiple json files.
@@ -69,10 +71,10 @@ fmt.Println(db.GetString("key"))
 
 ## TODO
 
--   Improve concurrency support.
--   fixes, improvements
--   more changes..
--   ...future development
+- Improve concurrency support.
+- fixes, improvements
+- more changes..
+- ...future development
 
 ##
 
