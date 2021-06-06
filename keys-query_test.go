@@ -22,6 +22,9 @@ func TestRemoveKeys(t *testing.T) {
 
 	// attempt to remove
 	db.RemoveKey("sample")
+	if _, err := db.FindKey("sample"); err == nil {
+		t.Fatal("key still exists!")
+	}
 	if isPathExists(path.Join(f, sk)) {
 		t.Fatal("the key still exists!")
 	}

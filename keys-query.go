@@ -57,6 +57,7 @@ func (db *MiniDB) RemoveCollection(key string) error {
 
 	// remove the key and the filename
 	delete(db.content.Collections, key)
+	db.writeToDB()
 
 	return os.RemoveAll(path.Join(db.path, filename))
 }
@@ -76,6 +77,7 @@ func (db *MiniDB) RemoveStore(key string) error {
 
 	// remove the key and the filename
 	delete(db.content.Store, key)
+	db.writeToDB()
 
 	return os.RemoveAll(path.Join(db.path, filename))
 }
@@ -95,6 +97,7 @@ func (db *MiniDB) RemoveKey(key string) error {
 
 	// remove the key and the filename
 	delete(db.content.Keys, key)
+	db.writeToDB()
 
 	return os.RemoveAll(path.Join(db.path, filename))
 }
