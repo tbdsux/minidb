@@ -4,7 +4,7 @@ import (
 	"sync"
 )
 
-const Version = "0.1.5"
+const Version = "0.1.6"
 
 type (
 	// BaseMiniDB is the base db structure.
@@ -17,7 +17,7 @@ type (
 	MiniDB struct {
 		path     string
 		filename string
-		content    MiniDBContent
+		content  MiniDBContent
 		mutexes  map[string]*sync.Mutex
 		BaseMiniDB
 	}
@@ -31,14 +31,14 @@ type (
 
 	// MiniCollections is a collections store.
 	MiniCollections struct {
-		content   []interface{}
+		content []interface{}
 		mutexes map[int]*sync.Mutex
 		BaseMiniDB
 	}
 
 	// MiniStore is a key-value store.
 	MiniStore struct {
-		content   map[string]interface{}
+		content map[string]interface{}
 		mutexes map[string]*sync.Mutex
 		BaseMiniDB
 	}
