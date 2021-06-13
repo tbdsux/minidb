@@ -15,7 +15,7 @@ func (c *MiniCollections) RemoveAll(v interface{}) error {
 	return c.RemoveMany(v, -1)
 }
 
-// RemoveMany removes the number of elements corresponding to l. Use RemoveAll() for removing 
+// RemoveMany removes the number of elements corresponding to l. Use RemoveAll() for removing
 // all elements and Remove() for a single element.
 // `l` cannot be less than -1 or equal to 0.
 func (c *MiniCollections) RemoveMany(v interface{}, l int) error {
@@ -182,6 +182,19 @@ func (c *MiniCollections) FilterFloat() []float64 {
 	for _, i := range c.content {
 		if v, ok := i.(float64); ok {
 			values = append(values, v)
+		}
+	}
+
+	return values
+}
+
+// Filter accepts a function that return the values that returns true with it. // TODO
+func (c *MiniCollections) Filter(f func(interface{}) bool) []interface{} {
+	values := []interface{}{}
+
+	for _, i := range c.content {
+		if f(i) {
+			values = append(values, i)
 		}
 	}
 
