@@ -1,13 +1,13 @@
 package minidb
 
 import (
-	"io/ioutil"
+	"os"
 )
 
 // writes the file
-// it just wraps the ioutil
+// it just wraps the os.WriteFile
 func write(file string, data []byte) error {
-	return ioutil.WriteFile(file, data, 0755)
+	return os.WriteFile(file, data, 0755)
 }
 
 // writeToDB write the db.store to the defined json db file.

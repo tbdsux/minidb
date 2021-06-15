@@ -1,7 +1,6 @@
 package minidb
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -13,7 +12,7 @@ import (
 func ensureInitialDB(path string) ([]byte, bool) {
 	// read the json db file if exists
 	if simplefiletest.FileExists(path) {
-		data, err := ioutil.ReadFile(path)
+		data, err := os.ReadFile(path)
 		logError(err, err)
 
 		return data, false
