@@ -3,6 +3,8 @@ package minidb
 import (
 	"path"
 	"testing"
+
+	simplefiletest "github.com/TheBoringDude/simple-filetest"
 )
 
 func TestRemoveKeys(t *testing.T) {
@@ -16,7 +18,7 @@ func TestRemoveKeys(t *testing.T) {
 	db.Store("stores")
 
 	sk, _ := db.FindKey("sample")
-	if !isPathExists(path.Join(f, sk)) {
+	if !simplefiletest.Exists(path.Join(f, sk)) {
 		t.Fatal("the key does not exist")
 	}
 
@@ -25,7 +27,7 @@ func TestRemoveKeys(t *testing.T) {
 	if _, err := db.FindKey("sample"); err == nil {
 		t.Fatal("key still exists!")
 	}
-	if isPathExists(path.Join(f, sk)) {
+	if simplefiletest.Exists(path.Join(f, sk)) {
 		t.Fatal("the key still exists!")
 	}
 }

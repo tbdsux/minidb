@@ -3,14 +3,15 @@
 package minidb
 
 import (
-	"io/ioutil"
 	"os"
 	"testing"
+
+	simplefiletest "github.com/TheBoringDude/simple-filetest"
 )
 
 // removes the f which could be the created file or folder
 func cleanFileAfter(f string, t *testing.T) {
-	if !isPathExists(f) {
+	if !simplefiletest.Exists(f) {
 		t.Fatalf("Path / file : `%s` does not exist!\n", f)
 	} else {
 		// clean dir
@@ -20,11 +21,12 @@ func cleanFileAfter(f string, t *testing.T) {
 
 // it asserts the file's content
 func checkFileContent(filename, expected string, t *testing.T) {
-	if content, err := ioutil.ReadFile(filename); err != nil {
-		t.Fatalf("error trying to read ->  %s", filename)
-	} else {
-		if string(content) != expected {
-			t.Fatalf("filename: %s => (content)`%s` is not similar to (expected)`%s`", filename, string(content), expected)
-		}
+	ok, err := simplefiletest.SimilarContents(filename, expected)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !ok {
+		t.Fatal("filename's content is not similar to expected")
 	}
 }
