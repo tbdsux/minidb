@@ -200,3 +200,63 @@ func (c *MiniCollections) Filter(f func(interface{}) bool) []interface{} {
 
 	return values
 }
+
+// FilterStringFunc returns all string elements.
+func (c *MiniCollections) FilterStringFunc(f func(x string) bool) []string {
+	values := []string{}
+
+	for _, i := range c.content {
+		if v, ok := i.(string); ok {
+			if f(v) {
+				values = append(values, v)
+			}
+		}
+	}
+
+	return values
+}
+
+// FilterIntFunc returns all int elements.
+func (c *MiniCollections) FilterIntFunc(f func(x int) bool) []int {
+	values := []int{}
+
+	for _, i := range c.content {
+		if v, ok := i.(int); ok {
+			if f(v) {
+				values = append(values, v)
+			}
+		}
+	}
+
+	return values
+}
+
+// FilterBoolFunc returns all bool elements.
+func (c *MiniCollections) FilterBoolFunc(f func(x bool) bool) []bool {
+	values := []bool{}
+
+	for _, i := range c.content {
+		if v, ok := i.(bool); ok {
+			if f(v) {
+				values = append(values, v)
+			}
+		}
+	}
+
+	return values
+}
+
+// FilterFloatFunc returns all float elements (uses float64). Some integers (int) might be included.
+func (c *MiniCollections) FilterFloatFunc(f func(x float64) bool) []float64 {
+	values := []float64{}
+
+	for _, i := range c.content {
+		if v, ok := i.(float64); ok {
+			if f(v) {
+				values = append(values, v)
+			}
+		}
+	}
+
+	return values
+}

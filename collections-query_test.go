@@ -2,6 +2,7 @@ package minidb
 
 import (
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -109,6 +110,23 @@ func TestFilter(t *testing.T) {
 	frBool := []bool{false}
 	if !reflect.DeepEqual(db.FilterBool(), frBool) {
 		t.Fatal("wrong filter bool output")
+	}
+}
+
+func TestFilterFunc(t *testing.T) {
+	filename := "filterfunc.json"
+	defer cleanFileAfter(filename, t)
+
+	db := NewMiniCollections(filename)
+	db.Push("hellox", "sample", 1, 100, false)
+	db.Push("sample", "another", 100, 9023423489, "he she", false, "hello world")
+
+	strValues := db.FilterStringFunc(func(x string) bool {
+		return strings.Contains(x, "he")
+	})
+
+	if !reflect.DeepEqual(strValues, []string{"hellox", "another", "he she", "hello world"}) {
+		t.Fatal("wrong returned values from filter func")
 	}
 }
 
