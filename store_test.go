@@ -16,6 +16,21 @@ type TestSampleMapReadKey struct {
 	Age  int    `json:"age"`
 }
 
+func TestStoreWithDefault(t *testing.T) {
+	dbname := "storedef"
+	db := New(dbname)
+
+	store := db.StoreWithDefault("def", map[string]interface{}{
+		"hello": "world",
+	})
+
+	if store.GetString("hello") != "world" {
+		t.Fatal("expected to have default value but wrong returned")
+	}
+
+	cleanFileAfter(dbname, t)
+}
+
 /* end test structs */
 
 func TestSet_Store(t *testing.T) {

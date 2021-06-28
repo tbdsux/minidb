@@ -24,7 +24,7 @@ func minidb(dir, filename string) *MiniDB {
 		},
 	}
 
-	if content, f := ensureInitialDB(db.db); f {
+	if content, f := ensureInitialDB(db.db, nil, "{}"); f {
 		db.writeToDB()
 	} else {
 		json.Unmarshal(content, &db.content)

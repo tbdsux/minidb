@@ -1,6 +1,7 @@
 package minidb
 
 import (
+	"encoding/json"
 	"os"
 	"path/filepath"
 
@@ -9,7 +10,7 @@ import (
 
 // ensures the db, creates the path if doesn't exist and reads the file db if exists
 // returns true if file does not exist, otherwise, false
-func ensureInitialDB(path string) ([]byte, bool) {
+func ensureInitialDB(path string, defaultValue interface{}, defaultData string) ([]byte, bool) {
 	// read the json db file if exists
 	if simplefiletest.FileExists(path) {
 		data, err := os.ReadFile(path)
@@ -19,7 +20,15 @@ func ensureInitialDB(path string) ([]byte, bool) {
 	}
 
 	err := os.MkdirAll(filepath.Dir(path), 0755)
-	logError(err, "error trying to write to db file path")
+	logError(err, "error creating db path")
 
-	return make([]byte, 0), true
+	// return the default value
+	if defaultValue != nil {
+		d, err := json.Marshal(defaultValue)
+		logError(err, "failed to marshall default value")
+
+		return d, true
+	}
+
+	return []byte(defaultData), true
 }

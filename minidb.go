@@ -53,12 +53,24 @@ func New(dir string) *MiniDB {
 
 // NewMiniStore creates and returns a new key-store collection json db.
 func NewMiniStore(f string) *MiniStore {
-	return ministore(f)
+	return ministore(f, nil)
 }
 
 // NewMiniCollections creates and returns a new collections json db.
 func NewMiniCollections(f string) *MiniCollections {
-	return minicollection(f)
+	return minicollection(f, nil)
+}
+
+// NewMiniStore creates and returns a new key-store collection json db.
+// If store does not exist, it will write the default value as its base content.
+func NewMiniStoreWithDefault(f string, defaultValue interface{}) *MiniStore {
+	return ministore(f, defaultValue)
+}
+
+// NewMiniCollections creates and returns a new collections json db.
+// If collections does not exist, it will write the default value as its base content.
+func NewMiniCollectionsWithDefault(f string, defaultValue interface{}) *MiniCollections {
+	return minicollection(f, defaultValue)
 }
 
 // ListCollections returns the list of collections created.
