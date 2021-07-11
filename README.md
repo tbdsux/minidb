@@ -14,6 +14,23 @@ go get -u github.com/TheBoringDude/minidb
 
 ## Usage
 
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/TheBoringDude/minidb"
+)
+
+func main() {
+	db := mindb.New('db')
+
+    fmt.Println(db)
+}
+
+```
+
 All operations are just appending and setting in a `map[string]interface{}` or `append([]interface{}, interface{})`.
 
 In all operations, it writes to the json file. I think it is not a good idea?
@@ -24,7 +41,7 @@ In all operations, it writes to the json file. I think it is not a good idea?
 
 It takes a directory and manages all files within it. It is better only to use this when trying to manage multiple json files.
 
-New files are created with a **`random uuid`** using [**`ksuid`**](https://github.com/segmentio/ksuid)
+New files are created with a **`random uuid`** using [**`ksuid`**](https://github.com/segmentio/ksuid) so each file created by the library is unique.
 
 #### NOTE: this creates many json files in a specified directory
 
@@ -52,7 +69,7 @@ fmt.Println(cols)
 A simple collections json db file.
 
 ```go
-db := minidb.NewMiniCollections("cols.json")
+db := minidb.NewCollections("cols.json")
 db.Push(1)
 
 fmt.Println(1)
@@ -63,7 +80,7 @@ fmt.Println(1)
 A simple key-value store json db file.
 
 ```go
-db := minidb.NewMiniStore("store.json")
+db := minidb.NewStore("store.json")
 db.Set("key", "value")
 
 fmt.Println(db.GetString("key"))
@@ -78,4 +95,4 @@ fmt.Println(db.GetString("key"))
 
 ##
 
-#### [License](./LICENSE)
+#### &copy; 2021 | [License](./LICENSE)
