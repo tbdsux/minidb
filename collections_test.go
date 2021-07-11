@@ -6,7 +6,7 @@ import (
 
 func TestCollections_FileContent(t *testing.T) {
 	filename := "content.json"
-	NewMiniCollections(filename)
+	NewCollections(filename)
 
 	checkFileContent(filename, "[]", t)
 	cleanFileAfter(filename, t)

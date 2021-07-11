@@ -36,7 +36,7 @@ func TestStoreWithDefault(t *testing.T) {
 func TestSet_Store(t *testing.T) {
 	defer cleanFileAfter("setstore.json", t)
 
-	db := NewMiniStore("setstore.json")
+	db := NewStore("setstore.json")
 	db.Set("hello", "world")
 
 	if check, err := ioutil.ReadFile("setstore.json"); err == nil {
@@ -53,7 +53,7 @@ func TestRead_Store(t *testing.T) {
 
 	defer cleanFileAfter(filename, t)
 
-	db := NewMiniStore(filename)
+	db := NewStore(filename)
 	db.Set("value", "hello world")
 	db.Set("bool", true)
 	db.Set("user", map[string]interface{}{

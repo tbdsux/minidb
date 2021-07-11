@@ -15,14 +15,14 @@ func TestNew(t *testing.T) {
 
 func TestNewMiniCollections(t *testing.T) {
 	file := "cols.json"
-	NewMiniCollections(file)
+	NewCollections(file)
 
 	cleanFileAfter(file, t)
 }
 
 func TestNewMiniStore(t *testing.T) {
 	file := "store.json"
-	NewMiniStore(file)
+	NewStore(file)
 
 	cleanFileAfter(file, t)
 }

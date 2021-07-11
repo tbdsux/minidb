@@ -9,7 +9,7 @@ import (
 func TestGetQuery(t *testing.T) {
 	defer cleanFileAfter("getstore.json", t)
 
-	db := NewMiniStore("getstore.json")
+	db := NewStore("getstore.json")
 	db.Set("hello", "world")
 
 	if db.GetString("hello") != "world" {
@@ -22,7 +22,7 @@ func TestRemoveQuery(t *testing.T) {
 
 	defer cleanFileAfter(filename, t)
 
-	db := NewMiniStore(filename)
+	db := NewStore(filename)
 	db.Set("value", false)
 	db.Set("string", "123")
 
@@ -37,7 +37,7 @@ func TestUpdateQuery(t *testing.T) {
 
 	defer cleanFileAfter(filename, t)
 
-	db := NewMiniStore(filename)
+	db := NewStore(filename)
 	db.Set("value", false)
 	db.Set("string", "123")
 
@@ -47,13 +47,12 @@ func TestUpdateQuery(t *testing.T) {
 	}
 }
 
-
 func TestFindKeyQuery(t *testing.T) {
 	filename := "findstore.json"
 
 	defer cleanFileAfter(filename, t)
 
-	db := NewMiniStore(filename)
+	db := NewStore(filename)
 	db.Set("hello", "world")
 	db.Set("hellox", "x hello")
 	db.Set("hell", false)
@@ -68,5 +67,4 @@ func TestFindKeyQuery(t *testing.T) {
 		t.Fatal("values returned from findkey are not equal")
 	}
 
-	
 }

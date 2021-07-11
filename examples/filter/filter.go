@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	db := minidb.NewMiniCollections("cols.json")
+	db := minidb.NewCollections("cols.json")
 
 	db.Push("sample", "sam", "hello", 100, true)
 

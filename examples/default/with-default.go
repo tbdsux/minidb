@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	cols := minidb.NewMiniCollectionsWithDefault("test.json", []interface{}{1, "3", 4, "hello"})
+	cols := minidb.NewCollectionsWithDefault("test.json", []interface{}{1, "3", 4, "hello"})
 
 	fmt.Println(cols.List())
 }

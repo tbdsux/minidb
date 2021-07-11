@@ -11,7 +11,7 @@ func TestPush_Collections(t *testing.T) {
 
 	defer cleanFileAfter(filename, t)
 
-	db := NewMiniCollections(filename)
+	db := NewCollections(filename)
 	db.Push([]int{1, 2, 3, 4, 5}, "sample")
 
 	checkFileContent(filename, `[[1,2,3,4,5],"sample"]`, t)
@@ -22,7 +22,7 @@ func TestFirstLast_Collections(t *testing.T) {
 
 	defer cleanFileAfter(filename, t)
 
-	db := NewMiniCollections(filename)
+	db := NewCollections(filename)
 
 	db.Push("hello", 1000, false)
 
@@ -40,7 +40,7 @@ func TestFind_Collections(t *testing.T) {
 
 	defer cleanFileAfter(filename, t)
 
-	db := NewMiniCollections(filename)
+	db := NewCollections(filename)
 
 	db.Push("hello", 1000, false, "THIN", "sample")
 
@@ -53,7 +53,7 @@ func TestFindAll_Collections(t *testing.T) {
 	filename := "findall.json"
 	defer cleanFileAfter(filename, t)
 
-	db := NewMiniCollections(filename)
+	db := NewCollections(filename)
 
 	db.Push("hello", 1, true, "hello")
 
@@ -66,7 +66,7 @@ func TestMatchString_Collections(t *testing.T) {
 	filename := "matchstring.json"
 	defer cleanFileAfter(filename, t)
 
-	db := NewMiniCollections(filename)
+	db := NewCollections(filename)
 
 	db.Push("hello", 1, true, "hello")
 
@@ -79,7 +79,7 @@ func TestMatchStringAll_Collections(t *testing.T) {
 	filename := "matchstring.json"
 	defer cleanFileAfter(filename, t)
 
-	db := NewMiniCollections(filename)
+	db := NewCollections(filename)
 
 	db.Push("hellox", 1, true, "hello_world")
 
@@ -93,7 +93,7 @@ func TestFilter(t *testing.T) {
 	filename := "filter.json"
 	defer cleanFileAfter(filename, t)
 
-	db := NewMiniCollections(filename)
+	db := NewCollections(filename)
 
 	db.Push("hellox", "sample", 1, 100, false)
 
@@ -117,7 +117,7 @@ func TestFilterFunc(t *testing.T) {
 	filename := "filterfunc.json"
 	defer cleanFileAfter(filename, t)
 
-	db := NewMiniCollections(filename)
+	db := NewCollections(filename)
 	db.Push("hellox", "sample", 1, 100, false)
 	db.Push("sample", "another", 100, 9023423489, "he she", false, "hello world")
 
@@ -134,7 +134,7 @@ func TestRemove(t *testing.T) {
 	filename := "removecols.json"
 	defer cleanFileAfter(filename, t)
 
-	db := NewMiniCollections(filename)
+	db := NewCollections(filename)
 	db.Push("sample", "another", 100, 9023423489, "sample", false, "sample")
 
 	db.RemoveAll("sample")
